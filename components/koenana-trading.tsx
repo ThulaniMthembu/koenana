@@ -99,6 +99,10 @@ export default function Component() {
     { name: "Environmental", image: "/images/environmental.jpeg" },
     { name: "Agricultural", image: "/images/agricultural.jpeg" },
     { name: "Transport", image: "/images/transport.jpeg" },
+    { name: "Plumbing", image: "/images/plumbing.jpg" },
+    { name: "Maintenance", image: "/images/maintenance.jpg" },
+    { name: "General Building", image: "/images/general-building.jpg" },
+    { name: "Supply of Material", image: "/images/material-supply.jpg" },
   ]
 
   const toggleMenu = () => {
