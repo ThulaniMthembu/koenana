@@ -8,6 +8,9 @@ import { HardHat, Mail, MapPin, Phone, User } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
+import emailjs from '@emailjs/browser'
+import { toast, ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 function ScrollRevealImage({ images }: { images: { src: string; alt: string }[] }) {
   const [isVisible, setIsVisible] = useState(false)
@@ -58,6 +61,12 @@ function ScrollRevealImage({ images }: { images: { src: string; alt: string }[] 
 export default function Component() {
   const [currentHeroIndex, setCurrentHeroIndex] = useState(0)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const heroContent = [
     {
@@ -136,6 +145,40 @@ export default function Component() {
 
     return () => observer.disconnect();
   }, []);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setFormData(prevData => ({
+      ...prevData,
+      [name]: value
+    }))
+  }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+
+    try {
+      await emailjs.send(
+        process.env.NEXT_PUBLIC_SERVICE_ID!,
+        process.env.NEXT_PUBLIC_TEMPLATE_ID!,
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          message: formData.message
+        },
+        process.env.NEXT_PUBLIC_PUBLIC_KEY
+      )
+
+      toast.success('Message sent successfully!')
+      setFormData({ name: '', email: '', message: '' })
+    } catch (error) {
+      console.error('Error sending email:', error)
+      toast.error('Failed to send message. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -248,6 +291,10 @@ export default function Component() {
                     <div className="transition-all duration-300 hover:bg-gray-100 dark:hover:bg-gray-600 p-2 rounded">
                       <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">CSD</dt>
                       <dd className="mt-1 text-lg font-semibold">MAAA1403909</dd>
+                    </div>
+                    <div className="transition-all duration-300  hover:bg-gray-100 dark:hover:bg-gray-600 p-2 rounded">
+                      <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">CRS Number</dt>
+                      <dd className="mt-1 text-lg font-semibold">10378666</dd>
                     </div>
                   </dl>
                 </div>
@@ -432,11 +479,36 @@ export default function Component() {
                     Fill out the form below, and we&apos;ll get back to you as soon as possible. Your inquiry is important to us, and we look forward to the opportunity to serve you.
                   </p>
                 </div>
-                <form className="space-y-4">
-                  <Input placeholder="Your Name" />
-                  <Input type="email" placeholder="Your Email" />
-                  <Textarea placeholder="Your Message" />
-                  <Button type="submit" className="w-full border-2 border-[#17901a] bg-[#17901a] text-white hover:bg-white hover:text-[#17901a] transition-colors duration-300">Send Message</Button>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <Input
+                    name="name"
+                    placeholder="Your Name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  <Input
+                    name="email"
+                    type="email"
+                    placeholder="Your Email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  <Textarea
+                    name="message"
+                    placeholder="Your Message"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  <Button
+                    type="submit"
+                    className="w-full border-2 border-[#17901a] bg-[#17901a] text-white hover:bg-white hover:text-[#17901a] transition-colors duration-300"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? 'Sending...' : 'Send Message'}
+                  </Button>
                 </form>
               </div>
             </div>
@@ -456,6 +528,7 @@ export default function Component() {
           </Link>
         </nav>
       </footer>
+      <ToastContainer position="bottom-right" />
       <style jsx global>{`
         @keyframes slideInUp {
           from {
