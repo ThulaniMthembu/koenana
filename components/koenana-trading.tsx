@@ -4,13 +4,14 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { HardHat, Mail, MapPin, Phone, User } from "lucide-react"
+import { HardHat, Mail, MapPin, Phone, User } from 'lucide-react'
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 import emailjs from '@emailjs/browser'
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 function ScrollRevealImage({ images }: { images: { src: string; alt: string }[] }) {
   const [isVisible, setIsVisible] = useState(false)
@@ -197,6 +198,7 @@ export default function Component() {
             <Link className="text-sm font-medium hover:underline underline-offset-4" href="#" onClick={closeMenu}>Home</Link>
             <Link className="text-sm font-medium hover:underline underline-offset-4" href="#about" onClick={closeMenu}>About</Link>
             <Link className="text-sm font-medium hover:underline underline-offset-4" href="#services" onClick={closeMenu}>Services</Link>
+            <Link className="text-sm font-medium hover:underline underline-offset-4" href="#projects" onClick={closeMenu}>Projects</Link>
             <Link className="text-sm font-medium hover:underline underline-offset-4" href="#values" onClick={closeMenu}>Values</Link>
             <Link className="text-sm font-medium hover:underline underline-offset-4" href="#objectives" onClick={closeMenu}>Objectives</Link>
             <Link className="text-sm font-medium hover:underline underline-offset-4" href="#contact" onClick={closeMenu}>Contact</Link>
@@ -293,7 +295,8 @@ export default function Component() {
                       <dd className="mt-1 text-lg font-semibold">MAAA1403909</dd>
                     </div>
                     <div className="transition-all duration-300  hover:bg-gray-100 dark:hover:bg-gray-600 p-2 rounded">
-                      <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">CRS Number</dt>
+                      <dt className="text-sm font-medium text-gray-500 dark:text-gray
+-400">CRS Number</dt>
                       <dd className="mt-1 text-lg font-semibold">10378666</dd>
                     </div>
                   </dl>
@@ -341,6 +344,53 @@ export default function Component() {
             </div>
           </div>
         </section>
+        <section id="projects" className="w-full py-12 md:py-24 lg:py-32">
+          <div className="container px-4 md:px-6">
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-8">Our Projects</h2>
+            <Tabs defaultValue="landscape" className="w-full">
+              <TabsList className="grid w-full grid-cols-3 mb-8">
+                <TabsTrigger value="landscape">Landscape</TabsTrigger>
+                <TabsTrigger value="portrait">Portrait</TabsTrigger>
+                <TabsTrigger value="video">Video</TabsTrigger>
+              </TabsList>
+              <TabsContent value="landscape" className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {[1, 2, 3, 4, 5, 6].map((num) => (
+                  <Image
+                    key={`landscape-${num}`}
+                    src={`/projects/landscape-${num}.jpg`}
+                    alt={`Landscape project ${num}`}
+                    width={400}
+                    height={300}
+                    className="rounded-lg object-cover w-full h-64"
+                  />
+                ))}
+              </TabsContent>
+              <TabsContent value="portrait" className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
+                  <Image
+                    key={`portrait-${num}`}
+                    src={`/projects/portrait-${num}.jpg`}
+                    alt={`Portrait project ${num}`}
+                    width={300}
+                    height={400}
+                    className="rounded-lg object-cover w-full h-96"
+                  />
+                ))}
+              </TabsContent>
+              <TabsContent value="video" className="flex justify-center">
+                <video
+                  controls
+                  width="640"
+                  height="360"
+                  className="rounded-lg"
+                >
+                  <source src="/projects/VID-20241126-WA0001.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              </TabsContent>
+            </Tabs>
+          </div>
+        </section>
         <section id="values" className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800 opacity-0 transition-opacity duration-1000" style={{animationDelay: '1s'}}>
           <div className="container px-4 md:px-6">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-8">Our Values</h2>
@@ -375,8 +425,8 @@ export default function Component() {
           <div className="container px-4 md:px-6">
             <ScrollRevealImage 
               images={[
-                { src: "/images/filler-image.jpg", alt: "Team working together" },
-                { src: "/images/filler-image2.jpg", alt: "Another team image" }
+                { src: "/images/IMG-20241126-WA0003.jpg", alt: "Team working together" },
+                { src: "/images/IMG-20241126-WA0016.jpg", alt: "Another team image" }
               ]} 
             />
           </div>
@@ -547,3 +597,4 @@ export default function Component() {
     </div>
   )
 }
+
